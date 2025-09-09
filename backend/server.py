@@ -190,6 +190,10 @@ async def root():
 async def ask_wine_question(query: WineQuery):
     """Ask a question to the wine business conversational agent"""
     try:
+        # Validate question is not empty
+        if not query.question or not query.question.strip():
+            raise HTTPException(status_code=422, detail="Question cannot be empty")
+            
         session_id = str(uuid.uuid4())
         response_text = await wine_agent.process_query(query.question, session_id)
         
